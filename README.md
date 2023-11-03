@@ -1,2 +1,2 @@
 # MbcApp
-Sample app for MBV Challenge
+Sample app for MBC Challenge
