@@ -26,8 +26,8 @@ class LogInViewModel @Inject constructor(
             when (result) {
                     is UserAuthRepository.AuthenticationResult.Success -> saveAccessToken(result.token)
                     is UserAuthRepository.AuthenticationResult.IncorrectPassword -> mState.value = LogInState.IncorrectPasswordError
+                    is UserAuthRepository.AuthenticationResult.InvalidClient, -> mState.value = LogInState.InvalidClientError
                     is UserAuthRepository.AuthenticationResult.GenericError,
-                        UserAuthRepository.AuthenticationResult.InvalidClient,
                         UserAuthRepository.AuthenticationResult.NetworkError,
                         UserAuthRepository.AuthenticationResult.BadRequest,
                         UserAuthRepository.AuthenticationResult.ApiError,
@@ -47,6 +47,7 @@ class LogInViewModel @Inject constructor(
 sealed class LogInState {
     class GenericError(val cause: String) : LogInState()
     object IncorrectPasswordError : LogInState()
+    object InvalidClientError : LogInState()
     object Success : LogInState()
 }
 
