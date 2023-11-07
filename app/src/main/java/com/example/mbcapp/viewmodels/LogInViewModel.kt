@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mbcapp.model.AccessTokenResponse
 import com.example.mbcapp.repositories.UserAuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,9 +22,10 @@ class LogInViewModel @Inject constructor(
 
     fun logInUser(email: String, password: String) {
         viewModelScope.launch {
-            when (userAuthRepository.logIn(email, password)) {
-                    is UserAuthRepository.AuthenticationResult.Success -> mState.value = LogInState.Success
-                    is UserAuthRepository.AuthenticationResult.IncorrectPassword -> mState.value = LogInState.GenericError("wrong credentials")
+            val result = userAuthRepository.logIn(email, password)
+            when (result) {
+                    is UserAuthRepository.AuthenticationResult.Success -> saveAccessToken(result.token)
+                    is UserAuthRepository.AuthenticationResult.IncorrectPassword -> mState.value = LogInState.IncorrectPasswordError
                     is UserAuthRepository.AuthenticationResult.GenericError,
                         UserAuthRepository.AuthenticationResult.InvalidClient,
                         UserAuthRepository.AuthenticationResult.NetworkError,
@@ -34,10 +36,17 @@ class LogInViewModel @Inject constructor(
         }
     }
 
+    private fun saveAccessToken(token: AccessTokenResponse) {
+        viewModelScope.launch {
+            userAuthRepository.saveAccessToken(token)
+        }
+    }
+
 }
 
 sealed class LogInState {
     class GenericError(val cause: String) : LogInState()
+    object IncorrectPasswordError : LogInState()
     object Success : LogInState()
 }
 

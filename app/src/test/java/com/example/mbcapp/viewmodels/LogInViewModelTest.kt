@@ -41,13 +41,27 @@ class LogInViewModelTest {
         val password = "aValidPassword"
         whenever(userAuthRepository.logIn(mail, password)).thenReturn(UserAuthRepository.AuthenticationResult.Success(accessTokenResponse))
 
-
         //When
         logInViewModel.logInUser(mail, password)
 
         //Then
         advanceUntilIdle()
         assert(logInViewModel.state.value == LogInState.Success)
+    }
+
+    @Test
+    fun `when login with incorrect password then IncorrectPasswordError is set in the state`() = runTest {
+        //Given
+        val mail = "aValidMail"
+        val password = "aInvalidPassword"
+        whenever(userAuthRepository.logIn(mail, password)).thenReturn(UserAuthRepository.AuthenticationResult.IncorrectPassword)
+
+        //When
+        logInViewModel.logInUser(mail, password)
+
+        //Then
+        advanceUntilIdle()
+        assert(logInViewModel.state.value == LogInState.IncorrectPasswordError)
     }
 
 

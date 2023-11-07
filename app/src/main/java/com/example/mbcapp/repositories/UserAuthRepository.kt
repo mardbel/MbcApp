@@ -7,6 +7,8 @@ interface UserAuthRepository {
 
     suspend fun logIn(email: String, password: String): AuthenticationResult
 
+    suspend fun saveAccessToken(token: AccessTokenResponse)
+
     sealed class AuthenticationResult {
         class Success(val token: AccessTokenResponse) : AuthenticationResult()
         object IncorrectPassword : AuthenticationResult()

@@ -1,5 +1,6 @@
 package com.example.mbcapp.repositories
 
+import com.example.mbcapp.model.AccessTokenResponse
 import com.example.mbcapp.model.LoginUser
 import com.example.mbcapp.remote.AuthenticationService
 import retrofit2.HttpException
@@ -27,13 +28,18 @@ class UserAuthRepositoryImp @Inject constructor(
             when (throwable) {
                 is IOException -> UserAuthRepository.AuthenticationResult.NetworkError
                 is HttpException -> when (throwable.code()) {
-                    in 400..499 -> UserAuthRepository.AuthenticationResult.BadRequest
+                    400 -> UserAuthRepository.AuthenticationResult.IncorrectPassword
+                    in 401..499 -> UserAuthRepository.AuthenticationResult.BadRequest
                     in 500..599 -> UserAuthRepository.AuthenticationResult.ApiError
                     else -> UserAuthRepository.AuthenticationResult.GenericError(throwable)
                 }
                 else -> UserAuthRepository.AuthenticationResult.GenericError(throwable)
             }
         }
+    }
+
+    override suspend fun saveAccessToken(token: AccessTokenResponse) {
+        TODO("Not yet implemented")
     }
 
 
