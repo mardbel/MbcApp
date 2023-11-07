@@ -44,7 +44,7 @@ class ServiceModule {
     @Provides
     @Singleton
     fun provideAuthService(): AuthenticationService = Retrofit.Builder()
-        .baseUrl(BaseUrls.LOGIN_URL)
+        .baseUrl(BaseUrls.API_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(AuthenticationService::class.java)

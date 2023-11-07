@@ -3,6 +3,7 @@ package com.example.mbcapp.presentation
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.mbcapp.databinding.ActivityLogInBinding
 import com.example.mbcapp.viewmodels.LogInState
@@ -40,7 +41,8 @@ class LogInActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 }
-                else -> {//TODO}
+                else -> {
+                    Toast.makeText(this, "otro error", Toast.LENGTH_SHORT).show()
                 }
             }
         }

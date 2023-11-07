@@ -1,5 +1,6 @@
 package com.example.mbcapp.repositories
 
+import com.example.mbcapp.model.LoginUser
 import com.example.mbcapp.remote.AuthenticationService
 import retrofit2.HttpException
 import java.io.IOException
@@ -9,19 +10,13 @@ class UserAuthRepositoryImp @Inject constructor(
     private val authenticationService: AuthenticationService,
 ) : UserAuthRepository {
 
-    private val clientId = "ofzl-2h5ympKa0WqqTzqlVJUiRsxmXQmt5tkgrlWnOE"
-    private val clientSecret = "lMQb900L-mTeU-FVTCwyhjsfBwRCxwwbCitPob96cuU"
-
     override suspend fun logIn(
         email: String,
         password: String
     ): UserAuthRepository.AuthenticationResult {
         return try {
-            val response = authenticationService.getNewAccessToken(
-                email = email,
-                password = password,
-                clientId = clientId,
-                clientSecret = clientSecret
+            val response = authenticationService.logInUser(
+                loginUserBody = LoginUser(email = email, password = password)
             )
 
             if (response.isSuccessful) {
