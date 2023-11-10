@@ -34,7 +34,7 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.state.observe(this) {
+        viewModel.loginState.observe(this) {
             when (it) {
                 is LogInState.Success -> {
                     val intent = Intent(this, SurveysActivity::class.java)

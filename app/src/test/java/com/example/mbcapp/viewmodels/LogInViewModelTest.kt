@@ -1,7 +1,7 @@
 package com.example.mbcapp.viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.mbcapp.model.AccessTokenResponse
+import com.example.mbcapp.model.Token
 import com.example.mbcapp.repositories.UserAuthRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -36,7 +36,7 @@ class LogInViewModelTest {
     @Test
     fun `when login with correct credentials then success is set in the state`() = runTest {
         //Given
-        val accessTokenResponse = AccessTokenResponse(accessToken = "aValidToken", secondsUntilExpiration = 7200, tokenType = "Bearer", refreshToken = "aValidRefreshToken", createdAt = 11)
+        val accessTokenResponse = Token(accessToken = "aValidToken", secondsUntilExpiration = 7200, tokenType = "Bearer", refreshToken = "aValidRefreshToken", createdAt = 11)
         val mail = "aValidMail"
         val password = "aValidPassword"
         whenever(userAuthRepository.logIn(mail, password)).thenReturn(UserAuthRepository.AuthenticationResult.Success(accessTokenResponse))
@@ -46,7 +46,7 @@ class LogInViewModelTest {
 
         //Then
         advanceUntilIdle()
-        assert(logInViewModel.state.value == LogInState.Success)
+        assert(logInViewModel.loginState.value == LogInState.Success)
     }
 
     @Test
@@ -61,7 +61,7 @@ class LogInViewModelTest {
 
         //Then
         advanceUntilIdle()
-        assert(logInViewModel.state.value == LogInState.IncorrectPasswordError)
+        assert(logInViewModel.loginState.value == LogInState.IncorrectPasswordError)
     }
 
 

@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mbcapp.model.AccessTokenResponse
+import com.example.mbcapp.model.TokenData
+import com.example.mbcapp.model.TokenResponse
 import com.example.mbcapp.repositories.UserAuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,30 +16,29 @@ class LogInViewModel @Inject constructor(
     private val userAuthRepository: UserAuthRepository
 ) : ViewModel() {
 
-    private val mState = MutableLiveData<LogInState>()
-    val state: LiveData<LogInState>
-        get() = mState
+    private val mLogInState = MutableLiveData<LogInState>()
+    val loginState: LiveData<LogInState>
+        get() = mLogInState
 
 
     fun logInUser(email: String, password: String) {
         viewModelScope.launch {
-            val result = userAuthRepository.logIn(email, password)
-            when (result) {
+            when (val result = userAuthRepository.logIn(email, password)) {
                     is UserAuthRepository.AuthenticationResult.Success -> saveAccessToken(result.token)
-                    is UserAuthRepository.AuthenticationResult.IncorrectPassword -> mState.value = LogInState.IncorrectPasswordError
-                    is UserAuthRepository.AuthenticationResult.InvalidClient, -> mState.value = LogInState.InvalidClientError
+                    is UserAuthRepository.AuthenticationResult.IncorrectPassword -> mLogInState.value = LogInState.IncorrectPasswordError
+                    is UserAuthRepository.AuthenticationResult.InvalidClient, -> mLogInState.value = LogInState.InvalidClientError
                     is UserAuthRepository.AuthenticationResult.GenericError,
                         UserAuthRepository.AuthenticationResult.NetworkError,
                         UserAuthRepository.AuthenticationResult.BadRequest,
                         UserAuthRepository.AuthenticationResult.ApiError,
-                        UserAuthRepository.AuthenticationResult.NoToken -> mState.value = LogInState.GenericError("unknown error")
+                        UserAuthRepository.AuthenticationResult.NoToken -> mLogInState.value = LogInState.GenericError("unknown error")
             }
         }
     }
 
-    private fun saveAccessToken(token: AccessTokenResponse) {
+    private fun saveAccessToken(token: TokenResponse) {
         viewModelScope.launch {
-            userAuthRepository.saveAccessToken(token)
+            mLogInState.value = LogInState.Success
         }
     }
 

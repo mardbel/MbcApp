@@ -1,8 +1,13 @@
 package com.example.mbcapp.di
 
+import android.app.Application
 import com.example.mbcapp.remote.AuthenticationService
+import com.example.mbcapp.remote.SurveyService
+import com.example.mbcapp.repositories.SurveyRepository
+import com.example.mbcapp.repositories.SurveyRepositoryImp
 import com.example.mbcapp.repositories.UserAuthRepository
 import com.example.mbcapp.repositories.UserAuthRepositoryImp
+import com.example.mbcapp.utils.SharePreferencesProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,10 +41,28 @@ class ServiceModule {
     @Provides
     @Singleton
     fun provideUserAuthRepository(
-        authenticationService: AuthenticationService
+        authenticationService: AuthenticationService,
+        sharePreferencesProvider: SharePreferencesProvider
         ): UserAuthRepository {
-        return UserAuthRepositoryImp(authenticationService)
+        return UserAuthRepositoryImp(authenticationService, sharePreferencesProvider)
     }
+
+    @Provides
+    @Singleton
+    fun provideSurveyRepository(
+        surveyService: SurveyService,
+        userRepository: UserAuthRepository,
+    ): SurveyRepository {
+        return SurveyRepositoryImp(surveyService, userRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSurveyService(): SurveyService = Retrofit.Builder()
+        .baseUrl(BaseUrls.API_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(SurveyService::class.java)
 
     @Provides
     @Singleton
@@ -48,5 +71,13 @@ class ServiceModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(AuthenticationService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideSharePreferences(
+        application: Application
+    ): SharePreferencesProvider {
+        return SharePreferencesProvider(application)
+    }
 
 }

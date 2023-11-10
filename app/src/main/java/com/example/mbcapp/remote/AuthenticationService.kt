@@ -1,7 +1,7 @@
 package com.example.mbcapp.remote
 
-import com.example.mbcapp.model.AccessTokenResponse
 import com.example.mbcapp.model.LoginUser
+import com.example.mbcapp.model.TokenResponse
 import com.example.mbcapp.remote.AuthenticationService.Companion.Resource.API_TOKEN_ENDPOINT
 import retrofit2.Response
 import retrofit2.http.*
@@ -17,5 +17,5 @@ interface AuthenticationService {
     @POST(API_TOKEN_ENDPOINT)
     suspend fun logInUser(
         @Body loginUserBody: LoginUser
-    ): Response<AccessTokenResponse>
+    ): Response<TokenResponse>
 }
