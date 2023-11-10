@@ -2,6 +2,8 @@ package com.example.mbcapp.viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.mbcapp.model.Token
+import com.example.mbcapp.model.TokenData
+import com.example.mbcapp.model.TokenResponse
 import com.example.mbcapp.repositories.UserAuthRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -36,7 +38,9 @@ class LogInViewModelTest {
     @Test
     fun `when login with correct credentials then success is set in the state`() = runTest {
         //Given
-        val accessTokenResponse = Token(accessToken = "aValidToken", secondsUntilExpiration = 7200, tokenType = "Bearer", refreshToken = "aValidRefreshToken", createdAt = 11)
+        val token = Token(accessToken = "ff", tokenType = "gg", secondsUntilExpiration = 1, refreshToken = "ff", createdAt = 1)
+        val tokenData = TokenData( "1", "Bearer", token)
+        val accessTokenResponse = TokenResponse(data = tokenData, null)
         val mail = "aValidMail"
         val password = "aValidPassword"
         whenever(userAuthRepository.logIn(mail, password)).thenReturn(UserAuthRepository.AuthenticationResult.Success(accessTokenResponse))
