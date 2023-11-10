@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.mbcapp.R
 import com.example.mbcapp.databinding.SurveyViewHolderBinding
 import com.example.mbcapp.model.Survey
@@ -47,8 +48,9 @@ class SurveyListAdapter(val onItemClick: (String) -> Unit) :
 
         fun bind(item: SurveyData) {
             binding.surveyNameTv.text = item.attributes.title
-            /*Glide.with(binding.imgHomeHolder.context).load(item.images.firstOrNull()?.url ?: R.string.image_place_holder)
-                .into(binding.imgHomeHolder)*/
+            binding.surveyDescription.text = item.attributes.description
+            Glide.with(binding.surveyImg.context).load(item.attributes.coverImage)
+                .into(binding.surveyImg)
             binding.root.setOnClickListener {
                 onItemClick(item.attributes.title)
             }
