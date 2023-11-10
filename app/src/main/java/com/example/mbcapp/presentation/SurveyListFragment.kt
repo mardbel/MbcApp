@@ -32,7 +32,7 @@ class SurveyListFragment : Fragment() {
 
         binding = FragmentSurveyListBinding.bind(view)
 
-        binding.surveysRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.surveysRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
         mAdapter = SurveyListAdapter(
             onItemClick = {

@@ -49,7 +49,8 @@ class SurveyListAdapter(val onItemClick: (String) -> Unit) :
         fun bind(item: SurveyData) {
             binding.surveyNameTv.text = item.attributes.title
             binding.surveyDescription.text = item.attributes.description
-            Glide.with(binding.surveyImg.context).load(item.attributes.coverImage)
+            val hdImage = item.attributes.coverImage
+            Glide.with(binding.surveyImg.context).load(hdImage+"l")
                 .into(binding.surveyImg)
             binding.root.setOnClickListener {
                 onItemClick(item.attributes.title)
