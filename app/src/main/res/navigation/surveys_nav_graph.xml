@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/surveys_nav_graph"
+    app:startDestination="@id/surveyListFragment">
+
+    <fragment
+        android:id="@+id/surveyListFragment"
+        android:name="com.example.mbcapp.presentation.SurveyListFragment"
+        android:label="fragment_list"
+        tools:layout="@layout/fragment_survey_list" >
+    </fragment>
+
+</navigation>
